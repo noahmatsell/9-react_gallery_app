@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+}
+
 body {
   text-align: center;
   font-family: 'Open Sans', sans-serif;
@@ -60,12 +64,14 @@ input {
   justify-content: space-between;
   -ms-align-items: flex-start;
   align-items: flex-start;
+  padding: 0px 10%;
 }
 .photo-container ul li {
   width: 220px;
   height: 165px;
   overflow: hidden;
   margin-bottom: 15px;
+  width: calc(100% * (1/4) - 15px);
 }
 .photo-container ul img {
   width: 100%;

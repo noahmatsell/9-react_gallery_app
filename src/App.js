@@ -3,26 +3,33 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import apiKey from './config';
+import {
+  BrowserRouter,
+  Route
+} from 'react-router-dom';
+import Switch from 'react-router-dom/Switch';
+
 //Components
 import Navbar from './Components/Navbar';
 import SearchForm from './Components/SearchForm';
 import PhotoContainer from './Components/PhotoContainer';
-
+import NotFound from './NotFound'
 
 export default class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       photos: [],
-      loading: true
+      loading: true,
+      query: "succulents"
     };
   } 
 
   componentDidMount() {
-    this.performSearch();
+    this.performSearch(this.state.query);
   }
   
-  performSearch = (query = 'succulents') => {
+  performSearch = (query) => {
     axios.get(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=25&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
@@ -39,10 +46,24 @@ export default class App extends Component {
     return (
       <div className="App">
         <SearchForm onSearch={this.performSearch} />
-        <Navbar />
-        {
-            (this.state.loading) ? <p>Loading...</p> : <PhotoContainer data={this.state.photos} />
-        }
+
+        <BrowserRouter>
+          <div className="container">
+            <Navbar />
+            <Switch>
+              <Route exact path={`/`} 
+                render={ () =>  (this.state.loading) ? <p>Loading...</p> : <PhotoContainer data={this.state.photos}/>}/> 
+              <Route path={`/cats`} 
+                render={ () =>  (this.state.loading) ? <p>Loading...</p> : <PhotoContainer search={this.performSearch} data={this.state.photos}/>}/> 
+              <Route path={`/dogs`} 
+                render={ () => (this.state.loading) ? <p>Loading...</p> : <PhotoContainer search={this.performSearch} data={this.state.photos}/>}/> 
+              <Route path={`/computers`} 
+                render={ () => (this.state.loading) ? <p>Loading...</p> : <PhotoContainer search={this.performSearch} data={this.state.photos}/>}/> 
+              <Route component={NotFound} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+
       </div>
     );
   }
