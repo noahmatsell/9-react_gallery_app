@@ -1,23 +1,44 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import apiKey from '../config';
+//Components
 import Photo from './Photo';
 import NoPhotos from './NoPhotos'
-
 
 export default class PhotoContainer extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
+    this.state = {
+      photoData: [],
+      loading: true,
+    };
   }
   
+  componentDidMount() {
+    this.performSearch(this.props.query);
+  }
+
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.query !== this.props.query) {
-      this.props.search(nextProps.query);
+      this.performSearch(nextProps.query);
     }
   }
 
+  performSearch = (query) => {
+    axios.get(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=25&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          photoData: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(error => {
+        console.log('Error fetching and parsing data', error);
+      });    
+  }
+
   render() {
-    const results = this.props.data;
+    const results = this.state.photoData;
     let photos;
     
     if (results.length > 0){
@@ -32,7 +53,7 @@ export default class PhotoContainer extends Component {
       <div className="photo-container">
         <h2>Results</h2>
         <ul>
-          {photos}
+        {(this.state.loading) ? <p>Loading...</p> : photos}
         </ul>
       </div>
     );
