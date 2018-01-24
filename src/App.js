@@ -34,6 +34,9 @@ export default class App extends Component {
                 return <QueryRoute {...props} query={this.state.query} />;
               }} />
               {/* <Route exact path={`/:query`} component={QueryRoute} /> */}
+              <Route exact path={`/search`} render={ () => {
+                  return <QueryRoute query={this.state.query}/>
+              } }/> 
               <Route exact path={`/cats`} render ={ () => {
                 return <QueryRoute query="cats"/>
               } }/>
