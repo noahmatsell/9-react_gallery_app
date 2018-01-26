@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-
 import {
   BrowserRouter,
   Route
@@ -13,46 +12,22 @@ import SearchForm from './Components/SearchForm';
 import QueryRoute from './Components/QueryRoute'
 import NotFound from './NotFound'
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: "succulents"
-    };
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <BrowserRouter>
-          <div className="container">
-            <Route path={`/search`} 
-              render={ () => <SearchForm onSearch={query => this.setState({ query })}  />}/> 
-            <Navbar />
-            <Switch>
-              <Route exact path={`/`} render={ ({props}) => {
-                return <QueryRoute {...props} query={this.state.query} />;
-              }} />
-              {/* <Route exact path={`/:query`} component={QueryRoute} /> */}
-              <Route exact path={`/search`} render={ () => {
-                  return <QueryRoute query={this.state.query}/>
-              } }/> 
-              <Route exact path={`/cats`} render ={ () => {
-                return <QueryRoute query="cats"/>
-              } }/>
-              <Route exact path={`/dogs`} render ={ () => {
-                return <QueryRoute query="dogs"/>
-              } }/>
-              <Route exact path={`/computers`} render ={ () => {
-                return <QueryRoute query="computers"/>
-              } }/>
-              <Route exact path={`/search/:query`} component={QueryRoute} />
-              <Route component={NotFound} />
-            </Switch>
-          </div>
-        </BrowserRouter>
-
+const App = () => (
+  <div className="App">
+    <BrowserRouter>
+      <div className="container">
+        <Route path={`/search`} 
+          render={ () => <SearchForm />}/> 
+        <Navbar />
+        <Switch>
+          <Route exact path={`/`} component={QueryRoute} />
+          <Route exact path={`/search`} component={QueryRoute} /> 
+          <Route exact path={`/search/:query`} component={QueryRoute} />
+          <Route component={NotFound} />
+        </Switch>
       </div>
-    );
-  }
-}
+    </BrowserRouter>
+  </div>
+);
+
+export default App;
