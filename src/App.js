@@ -16,7 +16,7 @@ const App = () => (
   <div className="App">
     <BrowserRouter>
       <div className="container">
-        <Route path={`/search`} 
+        <Route exact path={`/search`} 
           render={ () => <SearchForm />}/> 
         <Navbar />
         <Switch>

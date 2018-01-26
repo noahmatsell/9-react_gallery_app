@@ -25,6 +25,9 @@ export default class PhotoContainer extends Component {
   }
 
   performSearch = (query) => {
+    this.setState({
+      loading: true
+    });
     axios.get(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=25&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
@@ -53,7 +56,7 @@ export default class PhotoContainer extends Component {
       <div className="photo-container">
         <h2>Results</h2>
         <ul>
-        {(this.state.loading) ? <p>Loading...</p> : photos}
+        {(this.state.loading) ? <div><p>Loading...</p><div className="loader"></div></div> : photos}
         </ul>
       </div>
     );
